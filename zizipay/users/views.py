@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, View
+from django.views.generic import CreateView, TemplateView
 from django.contrib import messages
 from django.urls import reverse_lazy
 from .models import User
@@ -9,9 +9,13 @@ from .forms import UserRegisterForm
 
 
 # Homepage
-class Homepage(View):
-    model = User
+class Homepage(TemplateView):
     template_name = 'users/homepage.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
 
 
 

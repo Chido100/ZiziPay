@@ -1,0 +1,7 @@
+{% extends 'users/base.html' %}
+
+
+{% block content %}
+    <p>You have successfully signed out!</p>
+    <a class="btn btn-primary mb-2" href="{% url 'signin' %}">Signin Again</a>
+{% endblock content %}
