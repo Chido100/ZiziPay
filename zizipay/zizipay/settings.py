@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Custom apps
+    'users',
+
 
     'crispy_forms',
     'crispy_bootstrap5',
@@ -136,6 +139,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+AUTH_USER_MODEL = 'users.User'
+
+
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
@@ -147,3 +153,4 @@ JAZZMIN_SETTINGS = {
     'site_brand': 'ZiziPay',
     'order_with_respect_to': []
 }
+
