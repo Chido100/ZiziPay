@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 from shortuuid.django_fields import ShortUUIDField
+from django.db.models.signals import post_save
 from users.models import User
 
 
@@ -53,3 +54,15 @@ class Account(models.Model):
 
     def __str__(self):
         return f'{self.user}'
+
+
+def create_account(sender, instance, created, *args, **kwargs):
+    if created:
+        Account.objects.create(user=instance)
+
+def save_account(sender, instnace, **kwargs):
+    instnace.account.save()
+
+post_save.connect(create_account, sender=User)
+post_save.connect(save_account, sender=User)
+
