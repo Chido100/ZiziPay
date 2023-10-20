@@ -56,13 +56,40 @@ class Account(models.Model):
         return f'{self.user}'
 
 
-def create_account(sender, instance, created, *args, **kwargs):
+
+class KYC(models.Model):
+    id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='kyc', default='default.jpg')
+    marital_status = models.CharField(max_length=50, choices=MARITAL_STATUS)
+    gender = models.CharField(max_length=50, choices=GENDER)
+    identity_type = models.CharField(max_length=50, choices=IDENTITY_TYPE)
+    date_of_birth = models.DateTimeField(auto_now_add=False)
+
+    # Address
+    country = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+
+    # Contact Detail
+    mobile = models.CharField(max_length=100)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user}'
+
+
+
+
+def create_account(sender, instance, created, **kwargs):
     if created:
         Account.objects.create(user=instance)
 
-def save_account(sender, instnace, **kwargs):
-    instnace.account.save()
+def save_account(sender, instance, **kwargs):
+    instance.account.save()
 
 post_save.connect(create_account, sender=User)
 post_save.connect(save_account, sender=User)
+
 
