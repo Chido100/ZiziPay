@@ -65,6 +65,7 @@ class KYC(models.Model):
     marital_status = models.CharField(max_length=50, choices=MARITAL_STATUS)
     gender = models.CharField(max_length=50, choices=GENDER)
     identity_type = models.CharField(max_length=50, choices=IDENTITY_TYPE)
+    identity_image = models.ImageField(upload_to='kyc', null=True, blank=True)
     date_of_birth = models.DateTimeField(auto_now_add=False)
 
     # Address
@@ -76,12 +77,15 @@ class KYC(models.Model):
     mobile = models.CharField(max_length=100)
     date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name_plural = 'KYC'
+
     def __str__(self):
         return f'{self.user}'
 
 
 
-
+# Create account signal
 def create_account(sender, instance, created, **kwargs):
     if created:
         Account.objects.create(user=instance)
