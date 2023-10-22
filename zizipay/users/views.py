@@ -1,7 +1,5 @@
-from django.shortcuts import render
-from django.views.generic import CreateView, TemplateView
+from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.urls import reverse_lazy
 from .models import User
 from .forms import UserRegisterForm
 
@@ -9,24 +7,25 @@ from .forms import UserRegisterForm
 
 
 # Homepage
-class Homepage(TemplateView):
-    template_name = 'users/homepage.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
+def home_page(request):
+    context = {
+        'title': 'Homepage'
+    }
+    return render(request, 'users/homepage.html', context)
 
 
 
 # Register a new user
-class CreateUserView(CreateView):
-    model = User
-    form_class = UserRegisterForm
-    template_name = 'users/signup.html'
-    success_url = reverse_lazy('signin')
+def register_user(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'{username} is successfully registered.')
+            return redirect('signin')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'users/signup.html', {'form': form})
 
-    def form_valid(self, form):
-        username = form.cleaned_data.get('username')
-        messages.success(self.request, f'{username} has been successfully registered!')
-        return super().form_valid(form)
+
